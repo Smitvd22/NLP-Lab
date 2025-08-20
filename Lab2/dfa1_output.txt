@@ -1,0 +1,19 @@
+Input: cat, Result: Accepted
+Input: dog, Result: Accepted
+Input: a, Result: Accepted
+Input: zebra, Result: Accepted
+Input: hello, Result: Accepted
+Input: world, Result: Accepted
+Input: programming, Result: Accepted
+Input: dog1, Result: Not Accepted
+Input: 1dog, Result: Not Accepted
+Input: DogHouse, Result: Not Accepted
+Input: Dog_house, Result: Not Accepted
+Input:  cats, Result: Not Accepted
+Input: Cat, Result: Not Accepted
+Input: hello world, Result: Not Accepted
+Input: test@email, Result: Not Accepted
+Input: , Result: Accepted
+Input: 123, Result: Not Accepted
+Input: HELLO, Result: Not Accepted
+Input: hello!, Result: Not Accepted
