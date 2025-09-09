@@ -10,10 +10,98 @@ Input: 1dog, Result: Not Accepted
 Input: DogHouse, Result: Not Accepted
 Input: Dog_house, Result: Not Accepted
 Input:  cats, Result: Not Accepted
-Input: Cat, Result: Not Accepted
+Input: Cat, Result: Accepted
 Input: hello world, Result: Not Accepted
 Input: test@email, Result: Not Accepted
 Input: , Result: Accepted
 Input: 123, Result: Not Accepted
 Input: HELLO, Result: Not Accepted
 Input: hello!, Result: Not Accepted
+Input: i, Result: Accepted
+Input: yn, Result: Accepted
+Input: dbmrr, Result: Accepted
+Input: kbfekr, Result: Accepted
+Input: whfany, Result: Accepted
+Input: tm, Result: Accepted
+Input: C, Result: Accepted
+Input: Kdbcveez, Result: Accepted
+Input: Anspi, Result: Accepted
+Input: P, Result: Accepted
+Input: Ykqzp, Result: Accepted
+Input: Gszkamyuq, Result: Accepted
+Input: vruzvVp, Result: Not Accepted
+Input: lPbyufx, Result: Not Accepted
+Input: fXkrm, Result: Not Accepted
+Input: msykagsU, Result: Not Accepted
+Input: aUhmrq, Result: Not Accepted
+Input: pyuxF, Result: Not Accepted
+Input: rom0, Result: Not Accepted
+Input: e3, Result: Not Accepted
+Input: i4, Result: Not Accepted
+Input: unadt1cq, Result: Not Accepted
+Input: na6, Result: Not Accepted
+Input: rw6, Result: Not Accepted
+Input: 0ipbyrk, Result: Not Accepted
+Input: 6auufnc, Result: Not Accepted
+Input: 2vhxcub, Result: Not Accepted
+Input: 8rjeuyjy, Result: Not Accepted
+Input: 6erkqdu, Result: Not Accepted
+Input: 2nbxeova, Result: Not Accepted
+Input: oxx.xwv, Result: Not Accepted
+Input: zy!afqkq, Result: Not Accepted
+Input: r@x, Result: Not Accepted
+Input: ci?qhgk, Result: Not Accepted
+Input: @q, Result: Not Accepted
+Input: yagi@, Result: Not Accepted
+Input:  tk, Result: Not Accepted
+Input:  kr, Result: Not Accepted
+Input:  zre, Result: Not Accepted
+Input: , Result: Accepted
+Input: PXMYAIWS, Result: Not Accepted
+Input: KMHQETUA, Result: Not Accepted
+Input: KWSDWBLO, Result: Not Accepted
+
+Generated test words:
+i
+yn
+dbmrr
+kbfekr
+whfany
+tm
+C
+Kdbcveez
+Anspi
+P
+Ykqzp
+Gszkamyuq
+vruzvVp
+lPbyufx
+fXkrm
+msykagsU
+aUhmrq
+pyuxF
+rom0
+e3
+i4
+unadt1cq
+na6
+rw6
+0ipbyrk
+6auufnc
+2vhxcub
+8rjeuyjy
+6erkqdu
+2nbxeova
+oxx.xwv
+zy!afqkq
+r@x
+ci?qhgk
+@q
+yagi@
+ tk
+ kr
+ zre
+
+PXMYAIWS
+KMHQETUA
+KWSDWBLO

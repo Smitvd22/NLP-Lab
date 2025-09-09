@@ -1,0 +1,27 @@
+// English Morphological FST
+digraph {
+	rankdir=LR size="12,8"
+	node [fontsize=10 shape=circle]
+	edge [fontsize=9]
+	q0 [label=START shape=circle style=bold]
+	q1 [label=READING shape=circle]
+	q2 [label=S_ENDING shape=circle]
+	q3 [label=ES_NEEDED shape=circle]
+	q4 [label=Y_ENDING shape=circle]
+	q5 [label=IRREGULAR shape=circle]
+	q6 [label=ACCEPT shape=doublecircle style=bold]
+	q7 [label=REJECT fillcolor=lightgray shape=circle style=filled]
+	q0 -> q1 [label="α (letter)"]
+	q1 -> q1 [label="α (continue reading)"]
+	q1 -> q2 [label="word ending"]
+	q2 -> q6 [label="s → +N+PL\n(cats, dogs)"]
+	q1 -> q3 [label="s|x|z|ch|sh ending"]
+	q3 -> q6 [label="es → +N+PL\n(foxes, watches)"]
+	q1 -> q4 [label="consonant+y ending"]
+	q4 -> q6 [label="y→ies → +N+PL\n(tries, flies)"]
+	q0 -> q5 [label="irregular pattern"]
+	q5 -> q6 [label="children→child+N+PL\nfeet→foot+N+PL"]
+	q2 -> q6 [label="no suffix → +N+SG\n(cat, book)"]
+	q0 -> q7 [label="invalid input"]
+	q1 -> q7 [label="invalid pattern"]
+}

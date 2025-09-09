@@ -55,18 +55,11 @@ def main():
             sent_result[f'{n}gram_type'] = prob_type
         results.append(sent_result)
 
-    # Print results (limit to first 5 sentences for readability)
-    for i, r in enumerate(results[:5]):
-        print(f"Sentence {i+1}: {r['sentence']}")
-        for n in [1, 2, 3, 4]:
-            print(f"{n}-gram Add-One Smoothing Probability: {r[f'{n}gram_add_one']:.2e}")
-            print(f"{n}-gram Add-K Smoothing Probability: {r[f'{n}gram_add_k']:.2e}")
-            print(f"{n}-gram Token Type Smoothing Value: {r[f'{n}gram_type']:.2e}")
-        print('-' * 40)
-    
-    print(f"\nTotal sentences processed: {len(results)}")
-    if len(results) > 5:
-        print("(Showing only first 5 for readability)")
+    output_file = 'Lab4/sentence_probabilities.json'
+    with open(output_file, 'w', encoding='utf-8') as f:
+        json.dump(results, f, ensure_ascii=False, indent=4)
+
+    print(f"Results have been saved to {output_file}")
 
 if __name__ == "__main__":
     main()
