@@ -1,0 +1,58 @@
+{
+  "1_gram": {
+    "total_unique_ngrams": 652,
+    "vocab_size": 652,
+    "smoothing_techniques_applied": [
+      "add_one",
+      "add_k",
+      "token_type"
+    ],
+    "smoothed_counts_available": [
+      "add_one",
+      "add_k",
+      "token_type"
+    ]
+  },
+  "2_gram": {
+    "total_unique_ngrams": 1205,
+    "vocab_size": 652,
+    "smoothing_techniques_applied": [
+      "add_one",
+      "add_k",
+      "token_type"
+    ],
+    "smoothed_counts_available": [
+      "add_one",
+      "add_k",
+      "token_type"
+    ]
+  },
+  "3_gram": {
+    "total_unique_ngrams": 1281,
+    "vocab_size": 652,
+    "smoothing_techniques_applied": [
+      "add_one",
+      "add_k",
+      "token_type"
+    ],
+    "smoothed_counts_available": [
+      "add_one",
+      "add_k",
+      "token_type"
+    ]
+  },
+  "4_gram": {
+    "total_unique_ngrams": 1295,
+    "vocab_size": 652,
+    "smoothing_techniques_applied": [
+      "add_one",
+      "add_k",
+      "token_type"
+    ],
+    "smoothed_counts_available": [
+      "add_one",
+      "add_k",
+      "token_type"
+    ]
+  }
+}

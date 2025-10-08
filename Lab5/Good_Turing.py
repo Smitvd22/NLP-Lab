@@ -9,7 +9,6 @@ This module implements:
 2. Good-Turing smoothing for all n-gram models (unigram, bigram, trigram, quadrigram)
 3. Sentence probability computation with smoothed models
 4. Frequency table with top 100 frequencies showing C (MLE), Nc, and C* values
-5. Deleted interpolation smoothing for quadrigram model
 
 Good-Turing Formulas:
 - For unseen n-grams: P_unseen = N1 / (N * (V^n - N)) for n >= 2
@@ -259,87 +258,7 @@ class NGramModel:
             
         return prob
 
-class DeletedInterpolation:
-    """
-    Deleted interpolation smoothing for quadrigram model
-    
-    Uses EM algorithm to find optimal lambda parameters:
-    P(w_i | w_{i-3}, w_{i-2}, w_{i-1}) = λ1*P(w_i) + λ2*P(w_i|w_{i-1}) + 
-                                         λ3*P(w_i|w_{i-2}, w_{i-1}) + 
-                                         λ4*P(w_i|w_{i-3}, w_{i-2}, w_{i-1})
-    """
-    
-    def __init__(self, unigram_model, bigram_model, trigram_model, quadrigram_model):
-        self.models = [unigram_model, bigram_model, trigram_model, quadrigram_model]
-        self.lambdas = [0.25, 0.25, 0.25, 0.25]  # Initial equal weights
-        
-    def optimize_lambdas(self, held_out_sentences, iterations=10):
-        """Optimize lambda parameters using EM algorithm on held-out data"""
-        print("Optimizing interpolation parameters using EM algorithm...")
-        
-        for iteration in range(iterations):
-            lambda_numerators = [0.0, 0.0, 0.0, 0.0]
-            lambda_denominator = 0.0
-            
-            for sentence in held_out_sentences:
-                tokens = sentence.strip().split()
-                if len(tokens) < 4:
-                    continue
-                    
-                quadrigrams = get_sentence_ngrams(tokens, 4)
-                
-                for quad in quadrigrams:
-                    # Get probabilities from each model
-                    unigram = (quad[3],)
-                    bigram = (quad[2], quad[3])
-                    trigram = (quad[1], quad[2], quad[3])
-                    
-                    probs = [
-                        self.models[0].smoother.get_smoothed_probability(unigram, self.models[0].ngram_counts, 1),
-                        self.models[1].smoother.get_smoothed_probability(bigram, self.models[1].ngram_counts, 2),
-                        self.models[2].smoother.get_smoothed_probability(trigram, self.models[2].ngram_counts, 3),
-                        self.models[3].smoother.get_smoothed_probability(quad, self.models[3].ngram_counts, 4)
-                    ]
-                    
-                    # Calculate interpolated probability
-                    interpolated_prob = sum(self.lambdas[i] * probs[i] for i in range(4))
-                    
-                    if interpolated_prob > 0:
-                        # E-step: calculate expected counts
-                        for i in range(4):
-                            weight = (self.lambdas[i] * probs[i]) / interpolated_prob
-                            lambda_numerators[i] += weight
-                            lambda_denominator += weight
-            
-            # M-step: update lambdas
-            if lambda_denominator > 0:
-                self.lambdas = [num / lambda_denominator for num in lambda_numerators]
-                        
-            print(f"Iteration {iteration + 1}: λ = [{', '.join(f'{l:.6f}' for l in self.lambdas)}]")
-    
-    def get_interpolated_probability(self, quadrigram):
-        """Get interpolated probability for a quadrigram"""
-        unigram = (quadrigram[3],)
-        bigram = (quadrigram[2], quadrigram[3])
-        trigram = (quadrigram[1], quadrigram[2], quadrigram[3])
-        
-        prob_1 = self.models[0].smoother.get_smoothed_probability(
-            unigram, self.models[0].ngram_counts, 1
-        )
-        prob_2 = self.models[1].smoother.get_smoothed_probability(
-            bigram, self.models[1].ngram_counts, 2
-        )
-        prob_3 = self.models[2].smoother.get_smoothed_probability(
-            trigram, self.models[2].ngram_counts, 3
-        )
-        prob_4 = self.models[3].smoother.get_smoothed_probability(
-            quadrigram, self.models[3].ngram_counts, 4
-        )
-        
-        return (self.lambdas[0] * prob_1 + 
-                self.lambdas[1] * prob_2 + 
-                self.lambdas[2] * prob_3 + 
-                self.lambdas[3] * prob_4)
+
 
 def print_frequency_table(smoother, model_name, top_n=100):
     """Print comprehensive frequency table with top N frequencies"""
@@ -402,7 +321,7 @@ def evaluate_models_on_dataset(models, sentences, dataset_name):
     return results
 
 def main():
-    """Main execution function"""
+    """Main execution function for Good-Turing smoothing"""
     print("=" * 80)
     print("LAB 5: GOOD-TURING SMOOTHING IMPLEMENTATION")
     print("=" * 80)
@@ -460,74 +379,28 @@ def main():
     # Evaluate on test set
     test_results = evaluate_models_on_dataset(models, test_sentences, "Test")
     
-    # Step 5: Implement deleted interpolation for quadrigram model
-    print("\n5. DELETED INTERPOLATION FOR QUADRIGRAM MODEL")
-    print("-" * 50)
-    
-    # Use part of validation set for parameter optimization
-    held_out = val_sentences[:min(500, len(val_sentences))]
-    
-    interpolation = DeletedInterpolation(
-        models[1], models[2], models[3], models[4]
-    )
-    
-    interpolation.optimize_lambdas(held_out, iterations=10)
-    
-    print(f"\nFinal interpolation weights:")
-    for i, weight in enumerate(interpolation.lambdas, 1):
-        print(f"  λ{i} ({i}-gram): {weight:.6f}")
-    
-    # Evaluate interpolated model
-    print("\nEvaluating interpolated quadrigram model on test set...")
-    
-    test_sample = test_sentences[:min(50, len(test_sentences))]
-    interpolated_log_probs = []
-    
-    for sentence in test_sample:
-        tokens = sentence.strip().split()
-        if len(tokens) < 4:
-            continue
-            
-        quadrigrams = get_sentence_ngrams(tokens, 4)
-        sentence_prob = 1.0
-        
-        for quad in quadrigrams:
-            prob = interpolation.get_interpolated_probability(quad)
-            sentence_prob *= max(prob, 1e-10)
-        
-        if sentence_prob > 0:
-            log_prob = np.log(sentence_prob)
-            interpolated_log_probs.append(log_prob)
-    
-    if interpolated_log_probs:
-        avg_log_prob = np.mean(interpolated_log_probs)
-        perplexity = np.exp(-avg_log_prob)
-        print(f"Interpolated Model Performance on Test Set:")
-        print(f"  Valid sentences: {len(interpolated_log_probs)}/{len(test_sample)}")
-        print(f"  Average Log Probability: {avg_log_prob:.4f}")
-        print(f"  Perplexity: {perplexity:.2f}")
-    
-    # Step 6: Summary and insights
-    print("\n6. SUMMARY AND KEY INSIGHTS")
+    # Step 5: Summary and insights
+    print("\n5. SUMMARY AND KEY INSIGHTS")
     print("-" * 35)
     
-    print("Implementation Summary:")
+    print("Good-Turing Implementation Summary:")
     print("✓ Random sampling for data splits completed")
     print("✓ Good-Turing smoothing implemented for all n-gram models")
     print("✓ Proper handling of unseen n-grams using specified formulas")
     print("✓ Top 100 frequency tables generated showing C, Nc, and C* values")
-    print("✓ Deleted interpolation with EM optimization completed")
     print("✓ Model evaluation on validation and test sets completed")
     
     print("\nKey Findings:")
     print(f"1. Data sparsity increases with n-gram order")
     print(f"2. Good-Turing smoothing redistributes probability mass effectively")
-    print(f"3. Deleted interpolation finds optimal combination weights")
-    print(f"4. Higher-order models require more sophisticated smoothing")
+    print(f"3. Higher-order models require more sophisticated smoothing")
+    print(f"4. Singleton counts (N1) are crucial for unseen n-gram probabilities")
     
     print("\n" + "="*80)
     print("GOOD-TURING SMOOTHING IMPLEMENTATION COMPLETED SUCCESSFULLY!")
     print("="*80)
+    
+    return models
 
 if __name__ == "__main__":
     main()
