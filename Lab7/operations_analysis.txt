@@ -1,0 +1,43 @@
+Computational Complexity Analysis
+==================================================
+
+Dataset Sizes:
+  Train: 84 sentences
+  Validation: 10 sentences
+  Test: 11 sentences
+
+Theoretical Operations Count:
+  Train vs Train: 7,056 operations
+  Validation vs Train: 840 operations
+  Test vs Train: 924 operations
+  Total: 8,820 operations
+
+Optimizations Applied:
+  Chunk-based processing: 500 samples per chunk
+  Memory efficient: True
+  Normalized vectors: True
+  Sparse matrices: True
+
+Actual Computations Performed:
+  Similarity computations: 8,820
+  Comparison operations: 8,820
+
+Efficiency Metrics:
+  Computation efficiency: 100.00%
+  Memory chunking reduced peak memory usage
+  Sparse matrix format reduced storage requirements
+
+Computational Complexity Analysis:
+  Without optimizations:
+    Time: O(n²) for train-train + O(n*m) for val/test-train
+    Space: O(n²) for storing all similarities
+  With optimizations:
+    Time: Same complexity but with chunked processing
+    Space: O(chunk_size * n) - significant memory reduction
+    Additional benefits: Sparse matrices, normalized vectors
+
+Recommendations for Large Datasets:
+  1. Use approximate methods (LSH, random projections)
+  2. Implement early stopping for top-k search
+  3. Consider distributed computing for very large datasets
+  4. Use dimensionality reduction (SVD, PCA) on TF-IDF vectors
